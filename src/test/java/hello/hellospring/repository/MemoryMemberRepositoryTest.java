@@ -1,6 +1,7 @@
 package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,8 @@ import static org.assertj.core.api.Assertions.*;
 // 내가 무언가를 만들어야 하는데, 검증할 수 있는 틀을 만드는 것
 // 틀을 먼저 만들고 꽂히는지 계속 꽂아보는 것 = Test 주도 개발 (TDD)
 
-/* Test 코드 없이 개발하는건 나 혼자 개발할 때는 상관없는데 많은 사람들이 개발할 때는
+/*
+Test 코드 없이 개발하는건 나 혼자 개발할 때는 상관없는데 많은 사람들이 개발할 때는
 몇 만, 몇 십 만 라인 넘어가게 된다면 Test 코드 없이 개발하는 것은 거의 불가능하다.
  */
 
@@ -24,6 +26,7 @@ class MemoryMemberRepositoryTest {
 
     // 콜백 함수
     // 각각의 테스트가 실행되고 끝날 때마다 repository를 비워준다. -> 순서와 상관이 없어진다.
+    // 순서에 의존적으로 설계하면 절대 안된다.
     @AfterEach
     public void afterEach() {
         repository.clearStore();
@@ -42,7 +45,8 @@ class MemoryMemberRepositoryTest {
         // 근데 내가 이렇게 일일이 글자로 볼 수 없다.
         // System.out.println("result = " + (result == member));
 
-        // (기대하는 값 : Object expected, 실제 값 : Object actual)
+        // (답지, 제출)
+        // (기대하는 값 : Object expected, 실제 제출 값 : Object actual)
 //        Assertions.assertEquals(member, result);
         assertThat(member).isEqualTo(result);
     }
@@ -56,8 +60,6 @@ class MemoryMemberRepositoryTest {
         Member member2 = new Member();
         member2.setName("spring2");
         repository.save(member2);
-
-//        member1.setName("spring3");
 
         Member result = repository.findByName("spring1").get();
 
